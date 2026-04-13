@@ -81,6 +81,12 @@ export default function App() {
             <div className="col-span-full flex flex-col items-center justify-center py-20 gap-4">
               <RefreshCw className="w-8 h-8 animate-spin text-zinc-700" />
               <p className="text-zinc-600 text-xs font-bold uppercase tracking-widest">Connecting to server...</p>
+              <button 
+                onClick={() => window.location.reload()}
+                className="mt-4 px-4 py-2 bg-zinc-800 text-zinc-400 text-[10px] font-bold rounded hover:bg-zinc-700 transition-colors"
+              >
+                STUCK? CLICK TO REFRESH
+              </button>
             </div>
           )}
         </div>

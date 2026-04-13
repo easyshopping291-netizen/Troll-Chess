@@ -25,26 +25,30 @@ export function useGame() {
   });
 
   useEffect(() => {
-    const socketUrl = window.location.origin;
-    console.log('Connecting to socket at:', socketUrl);
-    
-    const newSocket = io(socketUrl, {
-      transports: ['websocket', 'polling'],
-      reconnectionAttempts: 5,
+    // Use default io() which connects to the same host
+    const newSocket = io({
+      transports: ['polling', 'websocket'], // Try polling first for better compatibility
+      reconnectionAttempts: 10,
+      reconnectionDelay: 1000,
     });
     
     setSocket(newSocket);
 
     newSocket.on('connect', () => {
-      console.log('Socket connected successfully');
+      console.log('Socket connected! ID:', newSocket.id);
     });
 
     newSocket.on('connect_error', (err) => {
-      console.error('Socket connection error:', err);
+      console.error('Socket connection error:', err.message);
+      // Fallback: try to fetch slots via HTTP if socket fails
+      fetch('/api/health')
+        .then(res => res.json())
+        .then(data => console.log('Health check fallback:', data))
+        .catch(e => console.error('Health check failed:', e));
     });
 
     newSocket.on('slots_update', (updatedSlots) => {
-      console.log('Received slots update:', updatedSlots);
+      console.log('Slots updated:', updatedSlots);
       setSlots(updatedSlots);
     });
 

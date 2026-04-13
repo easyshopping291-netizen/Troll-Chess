@@ -16,6 +16,11 @@ async function startServer() {
 
   const PORT = 3000;
 
+  // Health check
+  app.get("/api/health", (req, res) => {
+    res.json({ status: "ok", slots: slots.filter(s => s.occupied).length });
+  });
+
   // In-memory state
   const slots = Array.from({ length: 10 }, (_, i) => ({
     id: i + 1,
