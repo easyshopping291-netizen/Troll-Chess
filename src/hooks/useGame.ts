@@ -25,10 +25,26 @@ export function useGame() {
   });
 
   useEffect(() => {
-    const newSocket = io();
+    const socketUrl = window.location.origin;
+    console.log('Connecting to socket at:', socketUrl);
+    
+    const newSocket = io(socketUrl, {
+      transports: ['websocket', 'polling'],
+      reconnectionAttempts: 5,
+    });
+    
     setSocket(newSocket);
 
+    newSocket.on('connect', () => {
+      console.log('Socket connected successfully');
+    });
+
+    newSocket.on('connect_error', (err) => {
+      console.error('Socket connection error:', err);
+    });
+
     newSocket.on('slots_update', (updatedSlots) => {
+      console.log('Received slots update:', updatedSlots);
       setSlots(updatedSlots);
     });
 

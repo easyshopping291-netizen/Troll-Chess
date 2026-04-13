@@ -59,23 +59,30 @@ export default function App() {
         </header>
 
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 max-w-2xl w-full">
-          {slots.map((slot) => (
-            <button
-              key={slot.id}
-              onClick={() => selectSlot(slot.id)}
-              disabled={slot.occupied}
-              className={cn(
-                "aspect-square rounded-xl border-2 flex flex-col items-center justify-center gap-2 transition-all group",
-                slot.occupied 
-                  ? "bg-zinc-900 border-zinc-800 opacity-50 cursor-not-allowed" 
-                  : "bg-zinc-900 border-zinc-700 hover:border-white hover:bg-zinc-800 active:scale-95"
-              )}
-            >
-              <User className={cn("w-8 h-8", slot.occupied ? "text-zinc-700" : "text-zinc-400 group-hover:text-white")} />
-              <span className="text-[10px] font-black tracking-tighter">{slot.name}</span>
-              {slot.occupied && <span className="text-[8px] text-red-500 font-bold uppercase">Taken</span>}
-            </button>
-          ))}
+          {slots.length > 0 ? (
+            slots.map((slot) => (
+              <button
+                key={slot.id}
+                onClick={() => selectSlot(slot.id)}
+                disabled={slot.occupied}
+                className={cn(
+                  "aspect-square rounded-xl border-2 flex flex-col items-center justify-center gap-2 transition-all group",
+                  slot.occupied 
+                    ? "bg-zinc-900 border-zinc-800 opacity-50 cursor-not-allowed" 
+                    : "bg-zinc-900 border-zinc-700 hover:border-white hover:bg-zinc-800 active:scale-95"
+                )}
+              >
+                <User className={cn("w-8 h-8", slot.occupied ? "text-zinc-700" : "text-zinc-400 group-hover:text-white")} />
+                <span className="text-[10px] font-black tracking-tighter">{slot.name}</span>
+                {slot.occupied && <span className="text-[8px] text-red-500 font-bold uppercase">Taken</span>}
+              </button>
+            ))
+          ) : (
+            <div className="col-span-full flex flex-col items-center justify-center py-20 gap-4">
+              <RefreshCw className="w-8 h-8 animate-spin text-zinc-700" />
+              <p className="text-zinc-600 text-xs font-bold uppercase tracking-widest">Connecting to server...</p>
+            </div>
+          )}
         </div>
         
         <footer className="mt-12 text-zinc-800 text-[10px] font-bold uppercase tracking-[0.3em]">
